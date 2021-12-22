@@ -4,9 +4,7 @@ import common.Person;
 import common.PersonService;
 import common.Task;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -14,14 +12,20 @@ import java.util.stream.Collectors;
 Метод на входе принимает List<Integer> id людей, ходит за ними в сервис
 (он выдает несортированный Set<Person>, внутренняя работа сервиса неизвестна)
 нужно их отсортировать в том же порядке, что и переданные id.
-Оценить асимпотику работы
+Оценить асимптотику работы
+------------------------
+Время поиска индекса по значению из personIds - O(n)
+Не могу сказать, какое будет время сортировки через Comparator
+Получается сложность - O(n) + сложность сортировки
  */
 public class Task1 implements Task {
 
   // !!! Редактируйте этот метод !!!
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
-    return Collections.emptyList();
+    return persons.stream()
+            .sorted(Comparator.comparing(person -> personIds.indexOf(person.getId())))
+            .toList();
   }
 
   @Override
