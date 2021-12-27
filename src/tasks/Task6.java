@@ -18,19 +18,19 @@ import java.util.stream.Collectors;
 - словарь Map<Integer, Set<Integer>>, сопоставляющий каждой персоне множество id регионов
 - коллекция всех регионов Collection<Area>
 На выходе хочется получить множество строк вида "Имя - регион". Если у персон регионов несколько, таких строк так же будет несколько
+O(n*m) где n - кол-во ареек у персон, а m - кол-во ареек всего, а их очень много может быть, надо бы подготовить данные, чтобы нужную арейку находить быстро
  */
 public class Task6 implements Task {
 
   private Set<String> getPersonDescriptions(Collection<Person> persons,
                                             Map<Integer, Set<Integer>> personAreaIds,
                                             Collection<Area> areas) {
-
+    Map<Integer, Area> areasById = areas.stream()
+            .collect(Collectors.toMap(Area::getId, area -> area));
 
     return persons.stream()
             .flatMap(person -> personAreaIds.get(person.getId()).stream()
-                            .flatMap(areaId -> areas.stream()
-                                    .filter(area -> area.getId() == areaId))
-                                    .map(area -> person.getFirstName() + " - " + area.getName()))
+                           .map(area -> person.getFirstName() + " - " + areasById.get(area).getName()))
             .collect(Collectors.toSet());
   }
 

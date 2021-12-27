@@ -13,18 +13,18 @@ import java.util.stream.Collectors;
 (он выдает несортированный Set<Person>, внутренняя работа сервиса неизвестна)
 нужно их отсортировать в том же порядке, что и переданные id.
 Оценить асимптотику работы
-------------------------
-Время поиска индекса по значению из personIds - O(n)
-Не могу сказать, какое будет время сортировки через Comparator
-Получается сложность - O(n) + сложность сортировки
- */
+*/
 public class Task1 implements Task {
 
   // !!! Редактируйте этот метод !!!
   private List<Person> findOrderedPersons(List<Integer> personIds) {
     Set<Person> persons = PersonService.findPersons(personIds);
-    return persons.stream()
-            .sorted(Comparator.comparing(person -> personIds.indexOf(person.getId())))
+
+    Map<Integer, Person> personsById = persons.stream()
+            .collect(Collectors.toMap(Person::getId, person -> person));
+
+    return personIds.stream()
+            .map(person -> personsById.get(person))
             .toList();
   }
 
@@ -37,5 +37,4 @@ public class Task1 implements Task {
         .collect(Collectors.toList())
         .equals(ids);
   }
-
 }
