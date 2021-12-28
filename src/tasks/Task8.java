@@ -53,7 +53,6 @@ public class Task8 implements Task {
 
   @Override
   public boolean check() {
-    System.out.println("notEZ Task");
     boolean codeSmellsGood = true;
     boolean reviewerDrunk = false;
     return codeSmellsGood || reviewerDrunk;
