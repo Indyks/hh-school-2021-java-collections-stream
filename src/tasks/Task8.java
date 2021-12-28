@@ -31,29 +31,15 @@ public class Task8 implements Task {
   }
 
   public String getFullName(Person person) {
-    String fullName = "";
-    if (person.getSecondName() != null) {
-      fullName += person.getSecondName();
-    }
-
-    if (person.getFirstName() != null) {
-      if (!fullName.equals("")) {
-        fullName += " ";
-      }
-        fullName += person.getFirstName();
-    }
-
-    if (person.getMiddleName() != null) {
-      if (!fullName.equals("")) {
-        fullName += " ";
-      }
-      fullName += " " + person.getMiddleName();
-    }
-    return fullName;
+    return Stream.of(person.getSecondName(), person.getFirstName(), person.getMiddleName())
+            .filter(line -> line != null)
+            .collect(Collectors.joining(" "));
   }
 
   public Map<Integer, String> getPersonNames(Collection<Person> persons) {
-    return persons.stream().collect(Collectors.toMap(Person::getId, person -> getFullName(person)));
+    return persons.stream()
+            .distinct()
+            .collect(Collectors.toMap(Person::getId, person -> getFullName(person)));
   }
 
   public boolean hasSamePersons(Collection<Person> persons1, Collection<Person> persons2) {
@@ -62,7 +48,7 @@ public class Task8 implements Task {
   }
 
   public long countEven(Stream<Integer> numbers) {
-    return numbers.filter(num -> (num % 2 == 0 && num != 0)).count();
+    return numbers.filter(num -> num % 2 == 0).count();
   }
 
   @Override
